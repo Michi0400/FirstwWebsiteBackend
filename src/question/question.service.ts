@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { Question } from './model/question.entity';
+import { QuestionNew } from './model/questionNew.entity';
 
 @Injectable()
 export class QuestionService {
 
     constructor(
-        @InjectRepository(Question)
-        private readonly questionRepository: Repository<Question>,
+        @InjectRepository(QuestionNew)
+        private readonly questionRepository: Repository<QuestionNew>,
     ) { }
 
     public async getAll() {
@@ -16,10 +16,12 @@ export class QuestionService {
     }
 
 
-    public async create(question: Question) {
-        const q = new Question();
+    public async create(question: QuestionNew) {
+        const q = new QuestionNew();
         q.input = question.input;
-        q.output = question.output
+        q.output = question.output;
+        q.angaben = question.angaben;
+        q.anleitung = question.anleitung;
         return this.questionRepository.save(q);
     }
 
@@ -27,7 +29,7 @@ export class QuestionService {
         return await this.questionRepository.delete(id);
     }
 
-    public async update(id: string, question: Question): Promise<UpdateResult> {
+    public async update(id: string, question: QuestionNew): Promise<UpdateResult> {
         return await this.questionRepository.update(id, question);
     }
 }

@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { Question } from './model/question.entity';
+import { QuestionNew } from './model/questionNew.entity';
 import { QuestionService } from './question.service';
 
 @Controller('question')
@@ -14,7 +14,7 @@ export class QuestionController {
 
     @Post('/')
     public async create(
-        @Body() question: Question
+        @Body() question: QuestionNew
     ) {
         return this.questionService.create(question)
     }
@@ -25,7 +25,7 @@ export class QuestionController {
     }
 
     @Put('/:id')
-    public async update(@Body() question: Question, @Param('id') id): Promise<any> {
+    public async update(@Body() question: QuestionNew, @Param('id') id): Promise<any> {
         return this.questionService.update(id, question)
     }
 }
