@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { QuestionContentModule } from './question/question-content/questionContent.module';
 import { QuestionModule } from './question/question.module';
 import { ShoppinglistModule } from './shoppinglist/shoppinglist.module';
+import { AnlageModule } from './anlage/anlage.module';
 
 
 @Module({
@@ -18,7 +19,7 @@ import { ShoppinglistModule } from './shoppinglist/shoppinglist.module';
     synchronize: true,
     logging: true,
     entities: [__dirname + '/**/*.entity.{ts,js}']
-  }), QuestionModule, ShoppinglistModule, QuestionContentModule],
+  }), QuestionModule, ShoppinglistModule, QuestionContentModule, AnlageModule],
   controllers: [AppController],
   providers: [AppService],
 })

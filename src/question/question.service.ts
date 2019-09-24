@@ -20,7 +20,7 @@ export class QuestionService {
         const q = new QuestionNew();
         q.input = question.input;
         q.output = question.output;
-        q.angaben = question.angaben;
+        q.anlagen = question.anlagen;
         q.anleitung = question.anleitung;
         return this.questionRepository.save(q);
     }

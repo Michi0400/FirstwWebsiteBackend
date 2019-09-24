@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Anlage } from "../../anlage/model/anlage.entity";
 
 
 @Entity()
@@ -12,8 +13,9 @@ export class QuestionNew {
     @Column('text')
     public output: string;
 
-    @Column("simple-array")
-    public angaben: string[];
+    @ManyToMany(() => Anlage)
+    @JoinTable()
+    public anlagen: Anlage[];
 
     @Column('text')
     public anleitung: string;
