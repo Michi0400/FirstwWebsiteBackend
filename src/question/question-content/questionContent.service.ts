@@ -12,6 +12,6 @@ export class QuestionContentService {
     ) { }
 
     public async getOne(id) {
-        return this.questionRepository.findOne(id);
+        return this.questionRepository.findOne(id, { relations: ["angaben"] });
     }
 }

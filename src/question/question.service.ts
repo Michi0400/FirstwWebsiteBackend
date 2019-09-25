@@ -1,12 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { Angabe } from '../angabe/model/angabe.entity';
+import { AngabeService } from '../angabe/angabe.service';
 import { QuestionNew } from './model/questionNew.entity';
 
 @Injectable()
 export class QuestionService {
-    public angaben: Angabe[] = [];
+    @Inject()
+    private readonly angabenService: AngabeService;
 
     constructor(
         @InjectRepository(QuestionNew)
@@ -14,36 +15,23 @@ export class QuestionService {
     ) { }
 
     public async getAll() {
-        return this.questionRepository.find();
+        return this.questionRepository.find({ relations: ["angaben"] });
+    }
+    public async create({ name, description, angaben, anleitung }: QuestionNew) {
+        const question = this.questionRepository.create({
+            name,
+            description,
+            anleitung,
+            angaben: await this.angabenService.getByIds(angaben.map(a => a.id))
+        });
+        return this.questionRepository.save(question);
     }
 
-
-    public async create(question: QuestionNew) {
-        console.log(question.angaben)
-        this.foreach(question.angaben)
-        const q = new QuestionNew();
-        q.input = question.input;
-        q.output = question.output;
-        //q.anlagen = question.anlagen;
-        q.angaben = this.angaben;
-        q.anleitung = question.anleitung;
-        return await this.questionRepository.save(q);
-    }
-
-    public async delete(id): Promise<DeleteResult> {
-        return await this.questionRepository.delete(id);
+    public async delete(id: string): Promise<DeleteResult> {
+        return this.questionRepository.delete(id);
     }
 
     public async update(id: string, question: QuestionNew): Promise<UpdateResult> {
-        return await this.questionRepository.update(id, question);
-    }
-
-    private foreach(angaben: Angabe[]) {
-        for (let element of angaben) {
-            const anlage = new Angabe();
-            anlage.id = element.id;
-            anlage.name = element.name;
-            this.angaben.push(anlage);
-        }
+        return this.questionRepository.update(id, question);
     }
 }

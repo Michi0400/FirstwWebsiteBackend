@@ -21,6 +21,10 @@ export class AngabeService {
         })
     }
 
+    public async getByIds(ids: string[]) {
+        return this.anlagenRepository.findByIds(ids)
+    }
+
     public async create() {
         const a = new Angabe();
         a.name = "Gegenstand 3";

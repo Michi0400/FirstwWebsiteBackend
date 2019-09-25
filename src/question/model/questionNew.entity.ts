@@ -8,10 +8,10 @@ export class QuestionNew {
     public id: string;
 
     @Column('text')
-    public input: string;
+    public name: string;
 
     @Column('text')
-    public output: string;
+    public description: string;
 
     @ManyToMany(() => Angabe)
     @JoinTable()
