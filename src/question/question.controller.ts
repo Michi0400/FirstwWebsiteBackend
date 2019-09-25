@@ -16,7 +16,7 @@ export class QuestionController {
     public async create(
         @Body() question: QuestionNew
     ) {
-        return this.questionService.create(question)
+        return this.questionService.create(question);
     }
 
     @Delete('/:id')

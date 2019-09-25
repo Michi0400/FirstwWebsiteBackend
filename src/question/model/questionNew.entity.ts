@@ -1,5 +1,5 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Anlage } from "../../anlage/model/anlage.entity";
+import { Angabe } from "../../angabe/model/angabe.entity";
 
 
 @Entity()
@@ -13,9 +13,9 @@ export class QuestionNew {
     @Column('text')
     public output: string;
 
-    @ManyToMany(() => Anlage)
+    @ManyToMany(() => Angabe)
     @JoinTable()
-    public anlagen: Anlage[];
+    public angaben: Angabe[];
 
     @Column('text')
     public anleitung: string;

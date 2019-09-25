@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
-import { Anlage } from './model/anlage.entity';
+import { Angabe } from './model/angabe.entity';
 
 @Injectable()
-export class AnlageService {
+export class AngabeService {
 
-    constructor(@InjectRepository(Anlage) private readonly anlagenRepository: Repository<Anlage>) {
+    constructor(@InjectRepository(Angabe) private readonly anlagenRepository: Repository<Angabe>) {
     }
 
     public async getAll(searchTerm: string) {
@@ -22,8 +22,8 @@ export class AnlageService {
     }
 
     public async create() {
-        const a = new Anlage();
-        a.name = "Gegenstand2";
+        const a = new Angabe();
+        a.name = "Gegenstand 3";
 
         this.anlagenRepository.save(a);
     }
