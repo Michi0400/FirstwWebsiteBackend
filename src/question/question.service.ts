@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, EntityManager, Repository, UpdateResult } from 'typeorm';
 import { AngabeService } from '../angabe/angabe.service';
+import { AngabeC, AngabeH } from './model/angabe.dto';
 import { QuestionDTO } from './model/question.dto';
 import { QuestionNew } from './model/questionNew.entity';
 
@@ -9,6 +10,8 @@ import { QuestionNew } from './model/questionNew.entity';
 export class QuestionService {
   @Inject()
   private readonly angabenService: AngabeService;
+
+  public HelpAngaben: AngabeC[] = [];
 
   constructor(
     @InjectRepository(QuestionNew)
@@ -52,4 +55,32 @@ export class QuestionService {
   ): Promise<UpdateResult> {
     return this.questionRepository.update(id, question);
   }
+
+  public async getOne(id) {
+    const question = await this.questionRepository.findOne(id, { relations: ["angaben"] });
+    const resolvedAngaben = await this.angabenService.getByIds(
+      question.angaben.map(a => a.id),
+    );
+    for (let i = 0; i < resolvedAngaben.length; i++) {
+      const angabe: AngabeH[] = await this.manager
+        .createQueryBuilder()
+        .select('*')
+        .from('question_new_angaben_angabe', 'question_new_angaben_angabe')
+        .where("question_new_angaben_angabe.questionNewId = :qid", { qid: question.id })
+        .andWhere("question_new_angaben_angabe.angabeId = :aid", { aid: resolvedAngaben[i].id })
+        .getRawMany();
+
+      const HelpAngabe = new AngabeC();
+      HelpAngabe.id = resolvedAngaben[i].id;
+      HelpAngabe.name = resolvedAngaben[i].name;
+      HelpAngabe.menge = angabe[0].amount;
+      HelpAngabe.einheit = angabe[0].einheit;
+      this.HelpAngaben = [...this.HelpAngaben, HelpAngabe];
+    }
+    question.angaben = this.HelpAngaben;
+    this.HelpAngaben = [];
+    console.log(question)
+    return question;
+  }
+
 }

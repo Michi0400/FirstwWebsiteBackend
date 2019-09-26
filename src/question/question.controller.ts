@@ -12,6 +12,11 @@ export class QuestionController {
     return this.questionService.getAll();
   }
 
+  @Get('/content/:id')
+  public async getAllContent(@Param('id') id) {
+    return this.questionService.getOne(id);
+  }
+
   @Post('/')
   public async create(@Body() question: QuestionDTO) {
     return this.questionService.create(question);

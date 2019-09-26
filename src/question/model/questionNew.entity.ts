@@ -19,6 +19,4 @@ export class QuestionNew {
   @Column('text')
   public anleitung: string;
 
-  @Column('text', { nullable: true })
-  public einheit: string;
 }
