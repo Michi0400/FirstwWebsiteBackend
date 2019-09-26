@@ -1,18 +1,11 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { QuestionDTO } from './model/question.dto';
 import { QuestionNew } from './model/questionNew.entity';
 import { QuestionService } from './question.service';
 
 @Controller('question')
 export class QuestionController {
-  constructor(private readonly questionService: QuestionService) {}
+  constructor(private readonly questionService: QuestionService) { }
 
   @Get('/')
   public async getAll() {
@@ -20,7 +13,7 @@ export class QuestionController {
   }
 
   @Post('/')
-  public async create(@Body() question: QuestionNew) {
+  public async create(@Body() question: QuestionDTO) {
     return this.questionService.create(question);
   }
 

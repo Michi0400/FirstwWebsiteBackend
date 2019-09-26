@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, EntityManager, Repository, UpdateResult } from 'typeorm';
 import { AngabeService } from '../angabe/angabe.service';
+import { QuestionDTO } from './model/question.dto';
 import { QuestionNew } from './model/questionNew.entity';
 
 @Injectable()
@@ -14,12 +15,12 @@ export class QuestionService {
     private readonly questionRepository: Repository<QuestionNew>,
     @InjectEntityManager('default')
     private readonly manager: EntityManager,
-  ) {}
+  ) { }
 
   public async getAll() {
     return this.questionRepository.find({ relations: ['angaben'] });
   }
-  public async create({ name, description, angaben, anleitung }: QuestionNew) {
+  public async create({ name, description, angaben, anleitung }: QuestionDTO) {
     const resolvedAngaben = await this.angabenService.getByIds(
       angaben.map(a => a.id),
     );
@@ -29,16 +30,16 @@ export class QuestionService {
       anleitung,
       angaben: resolvedAngaben,
     });
-    await this.manager
-      .createQueryBuilder()
-      .update('question_new_angaben_angabe')
-      .set({
-        amount: 5,
-      } as any)
-      .where('questionNewId = :qid', { qid: question.id })
-      .andWhere('angabeId = :aid', { aid: resolvedAngaben[0] })
-      .execute();
-    return this.questionRepository.save(question);
+
+    const q = await this.questionRepository.save(question);
+    this.manager.transaction(async manager => {
+      for (let i = 0; i < resolvedAngaben.length; i++) {
+        await manager.query(`Update question_new_angaben_angabe set amount = $1, einheit = $2
+        where "question_new_angaben_angabe"."questionNewId" = $3
+        and "question_new_angaben_angabe"."angabeId" = $4`, [angaben[i].menge, angaben[i].einheit, q.id, resolvedAngaben[i].id])
+      }
+    })
+    return q;
   }
 
   public async delete(id: string): Promise<DeleteResult> {

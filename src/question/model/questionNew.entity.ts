@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Angabe } from '../../angabe/model/angabe.entity';
 
 @Entity() // Gericht --> Zum essen
@@ -24,4 +18,7 @@ export class QuestionNew {
 
   @Column('text')
   public anleitung: string;
+
+  @Column('text', { nullable: true })
+  public einheit: string;
 }

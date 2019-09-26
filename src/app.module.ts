@@ -16,9 +16,10 @@ import { ShoppinglistModule } from './shoppinglist/shoppinglist.module';
       username: 'postgres',
       password: '',
       database: 'nest',
-      synchronize: true,
+      synchronize: false,
       logging: true,
       entities: [__dirname + '/**/*.entity.{ts,js}'],
+      migrations: [__dirname + "/migrations/*.{ts,js}"]
     }),
     QuestionModule,
     ShoppinglistModule,
@@ -28,4 +29,4 @@ import { ShoppinglistModule } from './shoppinglist/shoppinglist.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
