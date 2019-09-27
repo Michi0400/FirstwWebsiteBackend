@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { ShoppingItem } from './model/shoppingitem.entity';
+import { ShoppingItemNew } from './model/shoppingitem.entity';
 import { ShoppinglistService } from "./shoppinglist.service";
 
 @Controller('shoppinglist')
@@ -13,7 +13,7 @@ export class ShoppinglistController {
 
     @Post('/')
     public async create(
-        @Body() shoppingItem: ShoppingItem
+        @Body() shoppingItem: ShoppingItemNew
     ) {
         return this.shoppingListService.create(shoppingItem)
     }
@@ -24,7 +24,7 @@ export class ShoppinglistController {
     }
 
     @Put('/:id')
-    public async update(@Body() shoppingItem: ShoppingItem, @Param('id') id): Promise<any> {
+    public async update(@Body() shoppingItem: ShoppingItemNew, @Param('id') id): Promise<any> {
         return this.shoppingListService.update(id, shoppingItem)
     }
 }

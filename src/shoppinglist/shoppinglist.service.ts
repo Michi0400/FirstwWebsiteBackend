@@ -1,22 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { ShoppingItem } from './model/shoppingitem.entity';
+import { ShoppingItemNew } from './model/shoppingitem.entity';
 
 @Injectable()
 export class ShoppinglistService {
 
     constructor(
-        @InjectRepository(ShoppingItem)
-        private readonly shoppingItemRepository: Repository<ShoppingItem>,
+        @InjectRepository(ShoppingItemNew)
+        private readonly shoppingItemRepository: Repository<ShoppingItemNew>,
     ) { }
 
     public async getAll() {
         return this.shoppingItemRepository.find();
     }
 
-    public async create(shoppingItem: ShoppingItem) {
-        const q = new ShoppingItem();
+    public async create(shoppingItem: ShoppingItemNew) {
+        const q = new ShoppingItemNew();
+        q.menge = shoppingItem.menge;
+        q.einheit = shoppingItem.einheit;
         q.name = shoppingItem.name;
         return this.shoppingItemRepository.save(q);
     }
@@ -25,7 +27,7 @@ export class ShoppinglistService {
         return await this.shoppingItemRepository.delete(id);
     }
 
-    public async update(id: string, shoppingItem: ShoppingItem): Promise<UpdateResult> {
+    public async update(id: string, shoppingItem: ShoppingItemNew): Promise<UpdateResult> {
         return await this.shoppingItemRepository.update(id, shoppingItem);
     }
 }
