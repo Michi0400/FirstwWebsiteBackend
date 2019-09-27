@@ -10,12 +10,12 @@ import { ShoppinglistModule } from './shoppinglist/shoppinglist.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: 'db',
       port: 5432,
       username: 'postgres',
       password: '',
       database: 'nest',
-      synchronize: false,
+      synchronize: true,
       logging: true,
       entities: [__dirname + '/**/*.entity.{ts,js}'],
       migrations: [__dirname + "/migrations/*.{ts,js}"]
