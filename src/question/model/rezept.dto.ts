@@ -1,6 +1,6 @@
 import { AngabeDTO } from "./angabe.dto";
 
-export interface QuestionDTO {
+export interface RezeptDTO {
     name: string;
 
     description: string;

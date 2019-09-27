@@ -3,71 +3,71 @@ import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, EntityManager, Repository, UpdateResult } from 'typeorm';
 import { AngabeService } from '../angabe/angabe.service';
 import { AngabeC, AngabeH } from './model/angabe.dto';
-import { QuestionDTO } from './model/question.dto';
-import { QuestionNew } from './model/questionNew.entity';
+import { RezeptDTO } from './model/rezept.dto';
+import { Rezept } from './model/rezept.entity';
 
 @Injectable()
-export class QuestionService {
+export class RezeptService {
   @Inject()
   private readonly angabenService: AngabeService;
 
   public HelpAngaben: AngabeC[] = [];
 
   constructor(
-    @InjectRepository(QuestionNew)
-    private readonly questionRepository: Repository<QuestionNew>,
+    @InjectRepository(Rezept)
+    private readonly rezeptRepository: Repository<Rezept>,
     @InjectEntityManager('default')
     private readonly manager: EntityManager,
   ) { }
 
   public async getAll() {
-    return this.questionRepository.find({ relations: ['angaben'] });
+    return this.rezeptRepository.find({ relations: ['angaben'] });
   }
-  public async create({ name, description, angaben, anleitung }: QuestionDTO) {
+  public async create({ name, description, angaben, anleitung }: RezeptDTO) {
     const resolvedAngaben = await this.angabenService.getByIds(
       angaben.map(a => a.id),
     );
-    const question = this.questionRepository.create({
+    const rezept = this.rezeptRepository.create({
       name,
       description,
       anleitung,
       angaben: resolvedAngaben,
     });
 
-    const q = await this.questionRepository.save(question);
+    const q = await this.rezeptRepository.save(rezept);
     this.manager.transaction(async manager => {
       for (let i = 0; i < resolvedAngaben.length; i++) {
-        await manager.query(`Update question_new_angaben_angabe set amount = $1, einheit = $2
-        where "question_new_angaben_angabe"."questionNewId" = $3
-        and "question_new_angaben_angabe"."angabeId" = $4`, [angaben[i].menge, angaben[i].einheit, q.id, resolvedAngaben[i].id])
+        await manager.query(`Update rezept_angaben_angabe set amount = $1, einheit = $2
+        where "rezept_angaben_angabe"."rezeptId" = $3
+        and "rezept_angaben_angabe"."angabeId" = $4`, [angaben[i].menge, angaben[i].einheit, q.id, resolvedAngaben[i].id])
       }
     })
     return q;
   }
 
   public async delete(id: string): Promise<DeleteResult> {
-    return this.questionRepository.delete(id);
+    return this.rezeptRepository.delete(id);
   }
 
   public async update(
     id: string,
-    question: QuestionNew,
+    question: Rezept,
   ): Promise<UpdateResult> {
-    return this.questionRepository.update(id, question);
+    return this.rezeptRepository.update(id, question);
   }
 
   public async getOne(id) {
-    const question = await this.questionRepository.findOne(id, { relations: ["angaben"] });
+    const rezept = await this.rezeptRepository.findOne(id, { relations: ["angaben"] });
     const resolvedAngaben = await this.angabenService.getByIds(
-      question.angaben.map(a => a.id),
+      rezept.angaben.map(a => a.id),
     );
     for (let i = 0; i < resolvedAngaben.length; i++) {
       const angabe: AngabeH[] = await this.manager
         .createQueryBuilder()
         .select('*')
-        .from('question_new_angaben_angabe', 'question_new_angaben_angabe')
-        .where("question_new_angaben_angabe.questionNewId = :qid", { qid: question.id })
-        .andWhere("question_new_angaben_angabe.angabeId = :aid", { aid: resolvedAngaben[i].id })
+        .from('rezept_angaben_angabe', 'rezept_angaben_angabe')
+        .where("rezept_angaben_angabe.rezeptId = :qid", { qid: rezept.id })
+        .andWhere("rezept_angaben_angabe.angabeId = :aid", { aid: resolvedAngaben[i].id })
         .getRawMany();
 
       const HelpAngabe = new AngabeC();
@@ -77,10 +77,10 @@ export class QuestionService {
       HelpAngabe.einheit = angabe[0].einheit;
       this.HelpAngaben = [...this.HelpAngaben, HelpAngabe];
     }
-    question.angaben = this.HelpAngaben;
+    rezept.angaben = this.HelpAngaben;
     this.HelpAngaben = [];
-    console.log(question)
-    return question;
+    console.log(rezept)
+    return rezept;
   }
 
 }

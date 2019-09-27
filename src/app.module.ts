@@ -3,8 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AngabeModule } from './angabe/angabe.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { QuestionContentModule } from './question/question-content/questionContent.module';
-import { QuestionModule } from './question/question.module';
+import { RezeptModule } from './question/rezept.module';
 import { ShoppinglistModule } from './shoppinglist/shoppinglist.module';
 
 @Module({
@@ -21,9 +20,8 @@ import { ShoppinglistModule } from './shoppinglist/shoppinglist.module';
       entities: [__dirname + '/**/*.entity.{ts,js}'],
       migrations: [__dirname + "/migrations/*.{ts,js}"]
     }),
-    QuestionModule,
+    RezeptModule,
     ShoppinglistModule,
-    QuestionContentModule,
     AngabeModule,
   ],
   controllers: [AppController],

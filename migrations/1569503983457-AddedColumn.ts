@@ -3,11 +3,11 @@ import { MigrationInterface, QueryRunner } from "typeorm";
 export class AddedColumn1569503983457 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<any> {
-        await queryRunner.query(`ALTER TABLE "question_new_angaben_angabe" ADD COLUMN "amount" integer DEFAULT 1`, undefined);
+        await queryRunner.query(`ALTER TABLE "rezept_angaben_angabe" ADD COLUMN "amount" integer DEFAULT 1`, undefined);
     }
 
     public async down(queryRunner: QueryRunner): Promise<any> {
-        await queryRunner.query(`ALTER TABLE "question_new_angaben_angabe" DROP Column `, undefined);
+        await queryRunner.query(`ALTER TABLE "rezept_angaben_angabe" DROP Column `, undefined);
     }
 
 }
