@@ -10,7 +10,7 @@ services:
     ports:
       - "5432:5432"
   web: 
-    image: FirstwWebsiteBackend
+    image: firstwwebsitebackend
     depends_on: 
       - db
     ports: 
