@@ -1,7 +1,6 @@
 version: "3.7"
 services: 
   db:
-    container_name: PostgreSQL
     image: postgres
     environment: 
       POSTGRES_PASSWORD: 
@@ -11,8 +10,7 @@ services:
     ports:
       - "5432:5432"
   web: 
-    container_name: NestJS
-    image: ccaballerog/clock-backend
+    image: FirstwWebsiteBackend
     depends_on: 
       - db
     ports: 
