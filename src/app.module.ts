@@ -8,7 +8,21 @@ import { ShoppinglistModule } from './shoppinglist/shoppinglist.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.DB_HOST,
+      port: 5432,
+      username: 'postgres',
+      password: '',
+      database: 'nest',
+      synchronize: true,
+      logging: true,
+      entities: ['./**/*.entity.{ts,js}', './dist/**/*.enitity.{ts,js}'],
+      migrations: ['./migrations/*.{ts,js}'],
+      cli: {
+        migrationsDir: 'migrations',
+      },
+    }),
     RezeptModule,
     ShoppinglistModule,
     AngabeModule,
@@ -16,4 +30,4 @@ import { ShoppinglistModule } from './shoppinglist/shoppinglist.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

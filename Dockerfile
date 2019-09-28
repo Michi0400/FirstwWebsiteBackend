@@ -14,7 +14,9 @@ COPY --from=builder /usr/app/dist ./dist
 
 COPY ormconfig.docker.json ./ormconfig.json 
 
-COPY .env .
+COPY .env* .
+
+ENV NODE_ENV production
 
 EXPOSE 4000
 CMD ["npm", "run", "start:prod"]
