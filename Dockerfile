@@ -12,9 +12,12 @@ RUN npm install --production
 
 COPY --from=builder /usr/app/dist ./dist
 
+COPY wait-for-it.sh .
+
 COPY .env* ./
 
 ENV NODE_ENV production
 
 EXPOSE 4000
+
 CMD ["npm", "run", "start:prod"]

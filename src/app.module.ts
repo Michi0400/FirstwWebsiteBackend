@@ -14,7 +14,7 @@ import { ShoppinglistModule } from './shoppinglist/shoppinglist.module';
       port: 5432,
       username: 'postgres',
       password: '',
-      database: 'nest',
+      database: 'postgres',
       synchronize: true,
       logging: true,
       entities: [__dirname + '/**/*.entity.{ts,js}'],
@@ -30,4 +30,4 @@ import { ShoppinglistModule } from './shoppinglist/shoppinglist.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

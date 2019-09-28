@@ -18,6 +18,8 @@ async function bootstrap() {
       origin: 'http://localhost:4200',
     },
   });
+  console.log(port)
   await app.listen(port);
+
 }
 bootstrap();
