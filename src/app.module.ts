@@ -17,7 +17,7 @@ import { ShoppinglistModule } from './shoppinglist/shoppinglist.module';
       database: 'nest',
       synchronize: true,
       logging: true,
-      entities: ['./**/*.entity.{ts,js}', './dist/**/*.enitity.{ts,js}'],
+      entities: ['./**/*.entity.{ts,js}'],
       migrations: ['./migrations/*.{ts,js}'],
       cli: {
         migrationsDir: 'migrations',
