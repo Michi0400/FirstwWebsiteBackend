@@ -8,18 +8,7 @@ import { ShoppinglistModule } from './shoppinglist/shoppinglist.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'db',
-      port: 5432,
-      username: 'postgres',
-      password: '',
-      database: 'nest',
-      synchronize: true,
-      logging: true,
-      entities: [__dirname + '/**/*.entity.{ts,js}'],
-      migrations: [__dirname + "/migrations/*.{ts,js}"]
-    }),
+    TypeOrmModule.forRoot(),
     RezeptModule,
     ShoppinglistModule,
     AngabeModule,

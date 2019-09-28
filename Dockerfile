@@ -1,7 +1,6 @@
 FROM node as builder
 WORKDIR /usr/app
 COPY package*.json ./
-RUN npm config set registry http://registry.npmjs.org
 RUN npm install
 COPY . .
 RUN npm run build
