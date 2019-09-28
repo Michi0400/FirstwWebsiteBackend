@@ -1,6 +1,7 @@
 version: "3.7"
 services:
   db:
+    container_name: db
     image: postgres:9.5
     environment:
       POSTGRES_PASSWORD:
@@ -16,3 +17,5 @@ services:
       - db
     ports:
       - "4000:4000"
+    links:
+      - db
